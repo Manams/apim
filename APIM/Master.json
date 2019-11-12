@@ -1,0 +1,184 @@
+{ 
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "TemplatesStorageAccount": {
+        "type": "string",
+        "defaultValue": "https://idli.blob.core.windows.net/apimcontainer"
+      },
+      "TemplatesStorageAccountSASToken": {
+        "type": "string",
+        "defaultValue": "?sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-11-15T08:25:00Z&st=2019-11-12T00:25:00Z&spr=https&sig=VX600e3YkQcQSB3zvufe03yob2mzyEXeR2Fr4mZaTW4%3D"
+      },
+      "APIManagementInstanceName": {
+         "type": "string",
+         "defaultvalue": "MS-MSO-DEV-APIM011"
+      },
+      "APIManagementSku": {
+        "type": "string",
+        "defaultValue": "Developer"
+      },
+      "APIManagementSkuCapacity": {
+        "type": "string",
+        "defaultValue": "1"
+      },
+      "PublisherName": {
+        "type": "string",
+        "defaultValue": "MSprasad"
+      },
+      "PublisherEmail": {
+        "type": "string",
+        "defaultValue": "syam.manam@gmail.com.com"
+      }
+    },
+    "resources": [
+        {
+           "apiVersion": "2017-05-10",
+           "name": "APIMInstanceTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/APIMInstance.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementSku": {"value": "[parameters('APIManagementSku')]" },
+                "APIManagementSkuCapacity": {"value": "[parameters('APIManagementSkuCapacity')]" },
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" },
+                "PublisherName": {"value": "[parameters('PublisherName')]" },
+                "PublisherEmail": {"value": "[parameters('PublisherEmail')]" }
+              }
+           }
+        },
+        {
+           "apiVersion": "2017-05-10",
+           "name": "apimuserTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/apimuser.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" }
+              }
+           },
+           "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments', 'APIMInstanceTemplate')]"
+           ]
+        },
+        {
+           "apiVersion": "2017-05-10",
+           "name": "apimgroupsTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/apimgroups.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" }
+              }
+           },
+           "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments', 'APIMInstanceTemplate')]"
+           ]
+        },
+        {
+           "apiVersion": "2017-05-10",
+           "name": "apimproductTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/apimproduct.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" }
+              }
+           },
+           "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments', 'APIMInstanceTemplate')]"
+           ]
+        },
+        {
+           "apiVersion": "2017-05-10",
+           "name": "apimusergroupsTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/apimusergroup.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" }
+              }
+           },
+           "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments', 'apimgroupsTemplate')]",
+            "[resourceId('Microsoft.Resources/deployments', 'apimuserTemplate')]"
+           ]
+        },
+        {
+           "apiVersion": "2017-05-10",
+           "name": "apimproductgroupTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/apimproductgroup.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" }
+              }
+           },
+           "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments', 'apimproductTemplate')]",
+            "[resourceId('Microsoft.Resources/deployments', 'apimgroupsTemplate')]"
+           ]
+        },
+        {
+           "apiVersion": "2017-05-10",
+           "name": "apimsubscriptionTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/apimsubscription.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" }
+              }
+           },
+           "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments', 'apimproductTemplate')]",
+            "[resourceId('Microsoft.Resources/deployments', 'apimuserTemplate')]"
+           ]
+        },
+        {
+           "apiVersion": "2017-05-10",
+           "name": "apimproductapiTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[concat(parameters('TemplatesStorageAccount'), '/apimproductapi.json', parameters('TemplatesStorageAccountSASToken'))]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parameters": {
+                "APIManagementInstanceName": {"value": "[parameters('APIManagementInstanceName')]" }
+              }
+           },
+           "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments', 'apimproductTemplate')]"
+           ]
+        }
+    ]
+  }

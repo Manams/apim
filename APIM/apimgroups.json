@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "APIManagementInstanceName": {
+          "type": "string",
+          "defaultValue": "MS-MSO-DEV-APIM011"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service/groups",
+            "name": "[concat(parameters('APIManagementInstanceName'), '/contosogroup')]",
+            "apiVersion": "2017-03-01",
+            "scale": null,
+            "properties": {
+                "displayName": "ContosoGroup",
+                "description": "Group containing all developers and services from Contoso who will be consuming our APIs",
+                "type": "custom",
+                "externalId": null
+            }
+        }
+    ]
+  }

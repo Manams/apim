@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "APIManagementInstanceName": {
+        "type": "string",
+        "defaultValue": "MS-MSO-DEV-APIM011"
+      }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service/subscriptions",
+            "name": "[concat(parameters('APIManagementInstanceName'), '/5ae6ed2358c2795ab5aaba68')]",
+            "apiVersion": "2017-03-01",
+            "scale": null,
+            "properties": {
+                "userId": "[resourceId('Microsoft.ApiManagement/service/users', parameters('APIManagementInstanceName'), 'john-smith-contoso-com')]",
+                "productId": "[resourceId('Microsoft.ApiManagement/service/products', parameters('APIManagementInstanceName'), 'contosoproduct')]",
+                "displayName": "ContosoProduct subscription",
+                "state": "active"
+            }
+        }
+    ]
+  }

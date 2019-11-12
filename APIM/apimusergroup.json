@@ -1,0 +1,19 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "APIManagementInstanceName": {
+          "type": "string",
+          "defaultValue": "MS-MSO-DEV-APIM011"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service/groups/users",
+            "name": "[concat(parameters('APIManagementInstanceName'), '/contosogroup/john-smith-contoso-com')]",
+            "apiVersion": "2017-03-01",
+            "scale": null,
+            "properties": {}
+        }
+    ]
+  }
